@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
     convertedForZip.push({ fileName: outputFileName, content: jpgBuffer });
     convertedResponseFiles.push({
       name: outputFileName,
-      downloadUrl: buildPublicUrl(request, `/api/download/${outputToken}`),
+      downloadUrl: `/api/download/${outputToken}`,
       sizeBytes: jpgBuffer.byteLength,
     });
   }
