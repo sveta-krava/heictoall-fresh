@@ -15,8 +15,8 @@ function sanitizeBaseName(fileName: string): string {
   return withoutExtension.replace(/[^a-zA-Z0-9-_]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '') || 'converted';
 }
 
-function buildPublicUrl(request: NextRequest, pathname: string): string {
-  return new URL(pathname, request.url).toString();
+function buildPublicUrl(_request: NextRequest, pathname: string): string {
+  return pathname;
 }
 
 export async function POST(request: NextRequest) {
@@ -67,6 +67,7 @@ export async function POST(request: NextRequest) {
     } catch {
       // Input file may already be gone.
     }
+
     const baseName = sanitizeBaseName(file.name);
     const outputFileName = `${baseName}.jpg`;
 
