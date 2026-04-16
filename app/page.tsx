@@ -1,50 +1,55 @@
-import Hero from '@/components/Hero';
-
-const faqs = [
-  {
-    question: 'How do I convert HEIC to JPG?',
-    answer:
-      'Upload one or more HEIC files, click convert, and download the JPG files individually or as a ZIP archive if you uploaded multiple files.',
-  },
-  {
-    question: 'Are my files stored?',
-    answer:
-      'No. Files are stored only temporarily while the conversion is running and are deleted automatically after a short period.',
-  },
-  {
-    question: 'Can I upload multiple HEIC files?',
-    answer: 'Yes. This MVP supports up to 10 HEIC or HEIF files per upload.',
-  },
-];
+import UploadBox from '@/components/UploadBox';
 
 export default function HomePage() {
   return (
-    <>
-      <Hero />
-      <section className="mx-auto max-w-6xl px-6 pb-20">
-        <div className="grid gap-6 md:grid-cols-3">
-          {faqs.map((item) => (
-            <article key={item.question} className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
-              <h2 className="text-lg font-semibold text-gray-950">{item.question}</h2>
-              <p className="mt-3 text-sm leading-6 text-gray-600">{item.answer}</p>
-            </article>
-          ))}
-        </div>
+    <main className="min-h-screen bg-gray-50 px-4 py-12">
+      <div className="mx-auto max-w-4xl">
+        <section className="flex flex-col items-center text-center">
+          <h1 className="text-4xl font-bold tracking-tight text-gray-950 sm:text-5xl">
+            Convert HEIC to JPG online for free.
+          </h1>
 
-        <div className="mt-14 rounded-3xl border border-gray-200 bg-white p-8 shadow-sm">
-          <h2 className="text-2xl font-semibold tracking-tight text-gray-950">Why use this HEIC to JPG converter?</h2>
-          <div className="mt-4 space-y-4 text-base leading-7 text-gray-600">
-            <p>
-              HEIC is commonly used by iPhones because it saves storage space while keeping image quality high. The downside is that many apps,
-              websites, and older devices still prefer JPG.
-            </p>
-            <p>
-              This converter focuses on one job only: turning HEIC and HEIF photos into JPG quickly, with a clean interface and no account creation.
-              It is designed as a minimal, extendable foundation for a larger file conversion platform.
+          <p className="mt-4 max-w-2xl text-base leading-7 text-gray-600 sm:text-lg">
+            Fast, simple, and private HEIC to JPG conversion. No signup required.
+          </p>
+
+          <div className="mt-10 w-full max-w-2xl">
+            <UploadBox />
+          </div>
+
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm font-semibold tracking-[0.2em] text-gray-900 uppercase">
+            <span>Free</span>
+            <span>Fast</span>
+            <span>Secure</span>
+          </div>
+        </section>
+
+        <section className="mt-16 space-y-10">
+          <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm">
+            <h2 className="text-xl font-semibold text-gray-950">Why use this converter?</h2>
+            <p className="mt-3 text-sm leading-7 text-gray-600">
+              Convert iPhone HEIC and HEIF photos to JPG in seconds. Your files are processed temporarily and cleaned
+              up automatically after conversion.
             </p>
           </div>
-        </div>
-      </section>
-    </>
+
+          <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm">
+            <h2 className="text-xl font-semibold text-gray-950">How it works</h2>
+            <ol className="mt-4 space-y-3 text-sm leading-7 text-gray-600">
+              <li>1. Upload your HEIC or HEIF files.</li>
+              <li>2. Click Convert to JPG.</li>
+              <li>3. Download your converted JPG files individually or as a ZIP.</li>
+            </ol>
+          </div>
+
+          <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm">
+            <h2 className="text-xl font-semibold text-gray-950">Privacy</h2>
+            <p className="mt-3 text-sm leading-7 text-gray-600">
+              Files are stored only temporarily for processing and download, then deleted automatically.
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
   );
 }

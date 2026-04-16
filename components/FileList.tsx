@@ -40,11 +40,11 @@ export default function FileList({ files, zipUrl }: FileListProps) {
               <p className="text-sm text-gray-500">{formatFileSize(file.sizeBytes)}</p>
             </div>
             <a
-              href={file.downloadUrl}
-              className="rounded-xl bg-gray-900 px-3 py-2 text-sm font-medium text-white transition hover:bg-gray-700"
-            >
-              Download JPG
-            </a>
+  href={file.downloadUrl}
+  className="inline-flex items-center justify-center rounded-2xl bg-black px-4 py-3 text-sm font-semibold !text-white transition hover:bg-gray-800"
+>
+  Download JPG
+</a>
           </div>
         ))}
       </div>
