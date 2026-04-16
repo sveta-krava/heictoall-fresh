@@ -1,5 +1,5 @@
 import fs from 'node:fs/promises';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { MAX_FILES, MAX_FILE_SIZE_BYTES, DOWNLOAD_TTL_MS } from '@/lib/config';
 import { convertHeicBufferToJpeg } from '@/lib/convert';
 import { startCleanupJob } from '@/lib/cleanup';
@@ -15,11 +15,7 @@ function sanitizeBaseName(fileName: string): string {
   return withoutExtension.replace(/[^a-zA-Z0-9-_]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '') || 'converted';
 }
 
-function buildPublicUrl(_request: NextRequest, pathname: string): string {
-  return pathname;
-}
-
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   startCleanupJob();
 
   const formData = await request.formData();
@@ -107,7 +103,7 @@ export async function POST(request: NextRequest) {
       expiresAt: Date.now() + DOWNLOAD_TTL_MS,
     });
 
-    zipUrl = buildPublicUrl(request, `/api/download-zip/${zipToken}`);
+    zipUrl = `/api/download-zip/${zipToken}`;
   }
 
   return NextResponse.json({
