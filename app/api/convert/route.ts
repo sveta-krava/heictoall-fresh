@@ -7,6 +7,7 @@ import { createToken, registerArtifact, writeBufferToFile } from '@/lib/file-sto
 import { convertedDir, uploadDir, zipDir } from '@/lib/paths';
 import { createZipBuffer } from '@/lib/zip';
 import { jsonError } from '@/lib/http';
+import { applyRateLimit, getClientIp, startRateLimitCleanup } from '@/lib/rate-limit';
 
 export const runtime = 'nodejs';
 
@@ -17,6 +18,35 @@ function sanitizeBaseName(fileName: string): string {
 
 export async function POST(request: Request) {
   startCleanupJob();
+  startRateLimitCleanup();
+
+  const clientIp = getClientIp(request);
+  const rateLimit = applyRateLimit(`convert:${clientIp}`, 10, 15 * 60 * 1000);
+
+  if (!rateLimit.allowed) {
+    const retryAfterSeconds = Math.max(
+      1,
+      Math.ceil((rateLimit.resetAt - Date.now()) / 1000)
+    );
+
+    return NextResponse.json(
+      {
+        success: false,
+        error: `Too many conversion requests from this IP. Please try again in about ${Math.ceil(
+          retryAfterSeconds / 60
+        )} minute(s).`,
+      },
+      {
+        status: 429,
+        headers: {
+          'Retry-After': String(retryAfterSeconds),
+          'X-RateLimit-Limit': '10',
+          'X-RateLimit-Remaining': String(rateLimit.remaining),
+          'X-RateLimit-Reset': String(Math.floor(rateLimit.resetAt / 1000)),
+        },
+      }
+    );
+  }
 
   const formData = await request.formData();
   const rawFiles = formData.getAll('files');
@@ -106,9 +136,18 @@ export async function POST(request: Request) {
     zipUrl = `/api/download-zip/${zipToken}`;
   }
 
-  return NextResponse.json({
-    success: true,
-    files: convertedResponseFiles,
-    zipUrl,
-  });
+  return NextResponse.json(
+    {
+      success: true,
+      files: convertedResponseFiles,
+      zipUrl,
+    },
+    {
+      headers: {
+        'X-RateLimit-Limit': '10',
+        'X-RateLimit-Remaining': String(rateLimit.remaining),
+        'X-RateLimit-Reset': String(Math.floor(rateLimit.resetAt / 1000)),
+      },
+    }
+  );
 }
