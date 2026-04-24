@@ -13,13 +13,22 @@ type ConvertResponse = {
 const MAX_FILES = 10;
 const MAX_FILE_SIZE_MB = 20;
 
+const OUTPUT_FORMATS = [
+  { id: 'jpg', label: 'JPG' },
+  { id: 'png', label: 'PNG' },
+];
+
 export default function UploadBox() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [outputFormat, setOutputFormat] = useState('jpg');
   const [isConverting, setIsConverting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<ConvertResponse | null>(null);
 
   const selectedFileNames = useMemo(() => selectedFiles.map((file) => file.name), [selectedFiles]);
+
+  const selectedFormatLabel =
+    OUTPUT_FORMATS.find((format) => format.id === outputFormat)?.label ?? outputFormat.toUpperCase();
 
   function validateFiles(files: File[]): string | null {
     if (files.length === 0) {
@@ -74,6 +83,7 @@ export default function UploadBox() {
 
     const formData = new FormData();
     selectedFiles.forEach((file) => formData.append('files', file));
+    formData.append('format', outputFormat);
 
     setIsConverting(true);
 
@@ -119,6 +129,29 @@ export default function UploadBox() {
           />
         </label>
 
+        <div>
+          <label htmlFor="output-format" className="mb-2 block text-sm font-medium text-gray-900">
+            Convert to
+          </label>
+
+          <select
+            id="output-format"
+            value={outputFormat}
+            onChange={(event) => {
+              setOutputFormat(event.target.value);
+              setResult(null);
+              setError(null);
+            }}
+            className="w-full rounded-2xl border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-900 shadow-sm outline-none transition focus:border-gray-900"
+          >
+            {OUTPUT_FORMATS.map((format) => (
+              <option key={format.id} value={format.id}>
+                {format.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
         {selectedFileNames.length > 0 ? (
           <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700">
             <p className="mb-2 font-medium text-gray-900">Ready to convert</p>
@@ -137,7 +170,7 @@ export default function UploadBox() {
           disabled={isConverting || selectedFiles.length === 0}
           className="w-full rounded-2xl bg-gray-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-gray-700 disabled:cursor-not-allowed disabled:bg-gray-400"
         >
-          {isConverting ? 'Converting…' : 'Convert to JPG'}
+          {isConverting ? 'Converting…' : `Convert to ${selectedFormatLabel}`}
         </button>
       </form>
 

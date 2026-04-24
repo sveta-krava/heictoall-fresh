@@ -29,6 +29,7 @@ export default function FileList({ files, zipUrl }: FileListProps) {
           </a>
         ) : null}
       </div>
+
       <div className="space-y-3">
         {files.map((file) => (
           <div
@@ -37,14 +38,18 @@ export default function FileList({ files, zipUrl }: FileListProps) {
           >
             <div>
               <p className="font-medium text-gray-900">{file.name}</p>
-              <p className="text-sm text-gray-500">{formatFileSize(file.sizeBytes)}</p>
+              <p className="text-sm text-gray-500">
+                {formatFileSize(file.sizeBytes)}
+              </p>
             </div>
+
             <a
-  href={file.downloadUrl}
-  className="inline-flex items-center justify-center rounded-2xl bg-black px-4 py-3 text-sm font-semibold !text-white transition hover:bg-gray-800"
->
-  Download JPG
-</a>
+              href={file.downloadUrl}
+              download={file.name}
+              className="inline-flex items-center justify-center rounded-2xl bg-black px-4 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
+            >
+              Download
+            </a>
           </div>
         ))}
       </div>
