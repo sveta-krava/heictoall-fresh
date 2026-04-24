@@ -10,18 +10,22 @@ export default function RotatingFormatTitle() {
   useEffect(() => {
     const intervalId = window.setInterval(() => {
       setIndex((currentIndex) => (currentIndex + 1) % FORMATS.length);
-    }, 1600);
+    }, 1000); // ← 1 second
 
     return () => window.clearInterval(intervalId);
   }, []);
 
   return (
     <h1 className="text-4xl font-bold tracking-tight text-gray-950 sm:text-5xl">
-      Convert HEIC to{' '}
-      <span className="inline-block min-w-[3.5ch] text-gray-950 transition-all duration-300">
-        {FORMATS[index]}
+      <span>Convert HEIC to </span>
+
+      <span className="inline-block w-[4ch] text-left">
+        <span className="transition-all duration-200">
+          {FORMATS[index]}
+        </span>
       </span>
-      <span className="sr-only">, PNG, PDF</span>
+
+      <span className="sr-only"> JPG, PNG, PDF</span>
     </h1>
   );
 }
