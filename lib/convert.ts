@@ -1,26 +1,18 @@
-import { FORMATS } from "@/lib/formats";
-import { convertHeic } from "@/lib/convert";
+import convert from 'heic-convert';
+import { FORMATS } from '@/lib/formats';
 
-export async function POST(req: Request) {
-  const formData = await req.formData();
-
-  const file = formData.get("file") as File;
-  const formatId = (formData.get("format") as string) || "jpg";
-
+export async function convertHeic(buffer: Buffer, formatId: string): Promise<Buffer> {
   const format = FORMATS[formatId];
 
-  if (!format) {
-    return new Response("Invalid format", { status: 400 });
+  if (!format || !format.heicConvertFormat) {
+    throw new Error(`Unsupported output format: ${formatId}`);
   }
 
-  const buffer = Buffer.from(await file.arrayBuffer());
-
-  const output = await convertHeic(buffer, formatId);
-
-  return new Response(output, {
-    headers: {
-      "Content-Type": format.mime,
-      "Content-Disposition": `attachment; filename="converted.${format.extension}"`,
-    },
+  const outputBuffer = await convert({
+    buffer,
+    format: format.heicConvertFormat,
+    quality: format.quality,
   });
+
+  return Buffer.from(outputBuffer);
 }
