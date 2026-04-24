@@ -16,6 +16,7 @@ const MAX_FILE_SIZE_MB = 20;
 const OUTPUT_FORMATS = [
   { id: 'jpg', label: 'JPG' },
   { id: 'png', label: 'PNG' },
+  { id: 'pdf', label: 'PDF' },
 ];
 
 export default function UploadBox() {
