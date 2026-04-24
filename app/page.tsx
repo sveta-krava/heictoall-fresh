@@ -1,13 +1,12 @@
 import UploadBox from '@/components/UploadBox';
+import RotatingFormatTitle from '@/components/RotatingFormatTitle';
 
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-gray-50 px-4 py-12">
       <div className="mx-auto max-w-4xl">
         <section className="flex flex-col items-center text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-gray-950 sm:text-5xl">
-            Convert HEIC to JPG online for free.
-          </h1>
+          <RotatingFormatTitle />
 
           <p className="mt-4 max-w-2xl text-base leading-7 text-gray-600 sm:text-lg">
             Fast, simple, and private HEIC to JPG conversion. No signup required.
